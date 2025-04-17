@@ -1,14 +1,17 @@
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import PokemonList from "@/components/pokemonList";
 
 export default function Index() {
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: '#FF495C'
       }}
     >
-      <PokemonList />
-    </View>
+      <View style={{ flex: 1, padding: 4}}>
+        <PokemonList />
+      </View>
+    </SafeAreaView>
   );
 }

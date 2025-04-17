@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import SvgImage from '@/components/svg';
 import { getPokedex } from '@/lib/pokedex';
+import Header from '@/components/header';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 const COLUMN_COUNT = 3;
@@ -19,25 +21,26 @@ const ITEM_WIDTH = (width - (SPACING * (COLUMN_COUNT + 1))) / COLUMN_COUNT;
 interface PokemonGridItemProps {
     name: string;
     id: number;
-    onPress: (id: number, name: string) => void;
 }
 
-const PokemonGridItem: React.FC<PokemonGridItemProps> = ({ name, id, onPress }) => {
+const PokemonGridItem: React.FC<PokemonGridItemProps> = ({ name, id }) => {
     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
+    const router = useRouter();
 
     return (
-        <TouchableOpacity
-            style={styles.gridItem}
-            onPress={() => onPress(id, name)}
-        >
-            <SvgImage
-                uri={imageUrl}
-                width={80}
-                height={80}
-            />
-            <Text style={styles.pokemonId}>#{id}</Text>
-            <Text style={styles.pokemonName}>{name}</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.gridItem}
+                onPress={() => router.push(`/${id}`)}
+            >
+                <SvgImage
+                    uri={imageUrl}
+                    width={80}
+                    height={80}
+                />
+                <Text style={styles.pokemonId}>#{id}</Text>
+                <Text style={styles.pokemonName}>{name}</Text>
+                <View style={styles.blockItem}></View>
+            </TouchableOpacity>
     );
 };
 
@@ -45,7 +48,7 @@ const PokemonList: React.FC = () => {
     const [pokemons, setPokemons] = useState<{ id: number, name: string }[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
+    const [searchQuery, setSearchQuery] = useState('');
     useEffect(() => {
         const fetchPokemons = async () => {
             try {
@@ -73,6 +76,10 @@ const PokemonList: React.FC = () => {
         console.log(`Pokémon sélectionné: ${name} (ID: ${id})`);
     };
 
+    const filteredPokemons = pokemons.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
@@ -92,21 +99,22 @@ const PokemonList: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Pokédex</Text>
-            <FlatList
-                data={pokemons}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <PokemonGridItem
-                        name={item.name}
-                        id={item.id}
-                        onPress={handlePokemonPress}
-                    />
-                )}
-                numColumns={COLUMN_COUNT}
-                contentContainerStyle={styles.gridContainer}
-                columnWrapperStyle={styles.columnWrapper}
-            />
+            <Header onSearchChange={setSearchQuery} />
+            <View style={styles.containerGridItem}>
+                <FlatList
+                    data={filteredPokemons}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <PokemonGridItem
+                            name={item.name}
+                            id={item.id}
+                        />
+                    )}
+                    numColumns={COLUMN_COUNT}
+                    contentContainerStyle={styles.gridContainer}
+                    columnWrapperStyle={styles.columnWrapper}
+                />
+            </View>
         </View>
     );
 };
@@ -114,7 +122,8 @@ const PokemonList: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        gap: 4,
+        backgroundColor: 'transparent',
     },
     loadingContainer: {
         flex: 1,
@@ -136,26 +145,26 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
     },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginVertical: 20,
-        color: '#FF0000',
-    },
     gridContainer: {
-        paddingHorizontal: SPACING,
+        paddingHorizontal: 8,
         paddingBottom: 20,
+        paddingTop: 20,
     },
     columnWrapper: {
-        justifyContent: 'space-between',
         marginBottom: SPACING,
+        gap: 4,
+    },
+    containerGridItem: {
+        flex: 1,
+        borderRadius:16,
+        backgroundColor: '#fff',
+        overflow: 'hidden',
+        boxShadow: '0px 1px 3px 1px #00000040 inset',
     },
     gridItem: {
         width: ITEM_WIDTH,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 10,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 2,
@@ -164,6 +173,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         aspectRatio: 0.9,
+    },
+    blockItem: {
+        position: 'absolute',
+        width: '100%',
+        height: '40%',
+        backgroundColor: '#EFEFEF',
+        bottom: 0,
+        zIndex: -1,
+        borderRadius: 10,
     },
     pokemonId: {
         fontSize: 12,

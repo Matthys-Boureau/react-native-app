@@ -30,7 +30,14 @@ export default function SvgImage({ uri, width = 100, height = 100 }: SvgImagePro
     fetchSvg();
   }, [uri]);
 
-  if (loading) return <ActivityIndicator size="small" color="#555" />;
+  if (loading) {
+    return (
+      <View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="small" color="#555" />
+      </View>
+    );
+  }
+
   if (!svgContent) return <View style={{ width, height }} />;
 
   return <SvgXml xml={svgContent} width={width} height={height} />;
