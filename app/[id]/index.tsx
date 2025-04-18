@@ -7,6 +7,7 @@ import PokemonNavigationArrows from '@/components/pokemonNavigationArrows';
 import StatHexagon from '@/components/pokeCharts';
 import { getColorFromType } from '@/lib/colorHelper';
 import { LinearGradient } from 'expo-linear-gradient';
+import PokemonDescription from '@/components/pokemonDescription';
 
 export default function PokemonDetail() {
     const { id } = useLocalSearchParams();
@@ -49,8 +50,6 @@ export default function PokemonDetail() {
     const typeColors = pokemon.types.map((t: any) => getColorFromType(t.type.name));
     const primaryType = pokemon.types[0]?.type.name;
     const primaryColor = typeColors[0];
-    // Si le Pokémon a plusieurs types, utilisez leurs couleurs pour le dégradé
-    // Sinon, utilisez la même couleur deux fois pour un fond uni
     const backgroundColors = typeColors.length > 1 ? typeColors : [primaryColor, primaryColor];
     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
 
@@ -117,9 +116,7 @@ export default function PokemonDetail() {
                         </View>
 
 
-                        <Text style={styles.aboutDescription}>
-                            This Pokémon prefers hot places. When it rains, steam is said to spout from the tip of its tail.
-                        </Text>
+                        <PokemonDescription id={pokemon.id} />
 
                         {/* Base Stats - Utilisation du composant StatHexagon */}
                         <StatHexagon stats={pokemon.stats} color={primaryColor} />
