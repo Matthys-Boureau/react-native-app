@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import axiosClient from '@/lib/axios';
 import PokeballAsset from '@/components/fichePokemonAsset';
 import PokemonNavigationArrows from '@/components/pokemonNavigationArrows';
-import StatHexagon from '@/components/pokeCharts';
 import { getColorFromType } from '@/lib/colorHelper';
 import { LinearGradient } from 'expo-linear-gradient';
-import PokemonDescription from '@/components/pokemonDescription';
+import FicheHeader from '@/components/fichePokemonHeader';
+import FichePokemonCard from '@/components/fichePokemonCard';
 
 export default function PokemonDetail() {
     const { id } = useLocalSearchParams();
@@ -63,63 +63,11 @@ export default function PokemonDetail() {
             <ScrollView style={styles.scrollView}>
                 <View style={[styles.container, { flex: 1 }]}>
                     <PokeballAsset />
-
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                            <Text style={styles.backArrow}>←</Text>
-                            <Text style={styles.name}>
-                                {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
-                            </Text>
-                        </TouchableOpacity>
-                        <Text style={styles.idText}>#{String(pokemon.id).padStart(3, '0')}</Text>
-                    </View>
-
-                    {/* Image */}
+                    <FicheHeader pokemon={pokemon} router={router} />
                     <View style={styles.imageContainer}>
                         <PokemonNavigationArrows id={pokemon.id} imgUrl={imageUrl} />
                     </View>
-
-                    {/* About Section */}
-                    <View style={styles.card}>
-                        {/* Type */}
-                        <View style={styles.typesContainer}>
-                            {pokemon.types.map((t: any, i: number) => (
-                                <Text key={i} style={{
-                                    backgroundColor: getColorFromType(t.type.name),
-                                    ...styles.typeBadge,
-                                }}>
-                                    {t.type.name}
-                                </Text>
-                            ))}
-                        </View>
-                        <View style={styles.aboutSection}>
-                            <View style={styles.aboutItem}>
-                                <Text style={styles.aboutLabel}>Weight</Text>
-                                <View style={styles.aboutValue}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center' }}>{pokemon.weight / 10} kg</Text>
-                                </View>
-                            </View>
-                            <View style={styles.aboutItem}>
-                                <Text style={styles.aboutLabel}>Height</Text>
-                                <View style={styles.aboutValue}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center' }}>{pokemon.height / 10} m</Text>
-                                </View>
-                            </View>
-                            <View style={styles.aboutItem}>
-                                <Text style={styles.aboutLabel}>Moves</Text>
-                                <View style={styles.aboutValue}>
-                                    <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>{pokemon.moves.slice(0, 2).map((m: any) => m.move.name).join('\n')}</Text>
-                                </View>
-                            </View>
-                        </View>
-
-
-                        <PokemonDescription id={pokemon.id} />
-
-                        {/* Base Stats - Utilisation du composant StatHexagon */}
-                        <StatHexagon stats={pokemon.stats} color={primaryColor} />
-                    </View>
+                    <FichePokemonCard pokemon={pokemon} primaryColor={primaryColor} />
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -143,85 +91,9 @@ const styles = StyleSheet.create({
         position: 'relative',
         flex: 1,
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 24,
-        paddingVertical: 24,
-    },
-    backButton: {
-        flexDirection: 'row',
-        gap: 16,
-        alignItems: 'center',
-    },
-    backArrow: {
-        fontSize: 32,
-        color: 'white',
-    },
-    name: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    idText: {
-        fontSize: 20,
-        color: 'white',
-    },
     imageContainer: {
         alignItems: 'center',
         marginVertical: 0,
         zIndex: 2,
-    },
-    card: {
-        backgroundColor: 'white',
-        borderRadius: 8,
-        padding: 20,
-        marginHorizontal: 4,
-        marginVertical: -48,
-        paddingTop: 64,
-        position: 'relative',
-    },
-    typesContainer: {
-        alignItems: 'center',
-        marginBottom: 16,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 24,
-        left: 8,
-    },
-    typeBadge: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 20,
-        fontWeight: 'bold',
-        color: 'white',
-        marginHorizontal: 4,
-        fontSize: 14,
-    },
-    aboutSection: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 24,
-    },
-    aboutItem: {
-        alignItems: 'center',
-    },
-    aboutValue: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        minHeight: 48,
-    },
-    aboutLabel: {
-        color: '#999',
-        fontSize: 12,
-        marginTop: 4,
-    },
-    aboutDescription: {
-        fontSize: 14,
-        textAlign: 'center',
-        color: '#555',
     },
 });
