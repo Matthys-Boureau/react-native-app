@@ -1,0 +1,112 @@
+import React, { memo } from 'react';
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions
+} from 'react-native';
+import PokemonGridItem from './pokemonGridItem';
+
+const { width } = Dimensions.get('window');
+const COLUMN_COUNT = 3;
+const SPACING = 8;
+const ITEM_WIDTH = (width - (SPACING * (COLUMN_COUNT + 1))) / COLUMN_COUNT;
+const PAGE_SIZE = 21;
+
+interface PokemonGridProps {
+  pokemons: Pokemon[];
+  isLoading: boolean;
+  onLoadMore: () => void;
+  hasSearch: boolean;
+}
+
+const PokemonGrid: React.FC<PokemonGridProps> = ({ 
+  pokemons, 
+  isLoading, 
+  onLoadMore,
+  hasSearch
+}) => {
+  const renderFooter = () => {
+    if (!isLoading) return null;
+    
+    return (
+      <View style={styles.footer}>
+        <ActivityIndicator size="small" color="#FF495C" />
+        <Text style={styles.footerText}>Chargement...</Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.containerGridItem}>
+      <FlatList
+        data={pokemons}
+        keyExtractor={(item) => `pokemon-${item.id}`}
+        renderItem={({ item }) => (
+          <PokemonGridItem
+            name={item.name}
+            id={item.id}
+          />
+        )}
+        numColumns={COLUMN_COUNT}
+        contentContainerStyle={styles.gridContainer}
+        columnWrapperStyle={styles.columnWrapper}
+        onEndReached={hasSearch ? undefined : onLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
+        initialNumToRender={PAGE_SIZE}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={PAGE_SIZE}
+        windowSize={21}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              Aucun Pokémon trouvé
+            </Text>
+          </View>
+        }
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  containerGridItem: {
+    flex: 1,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+  },
+  gridContainer: {
+    paddingHorizontal: 8,
+    paddingBottom: 20,
+    paddingTop: 20,
+  },
+  columnWrapper: {
+    marginBottom: SPACING,
+    gap: 4,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  footerText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#666',
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+  },
+});
+
+export default memo(PokemonGrid);

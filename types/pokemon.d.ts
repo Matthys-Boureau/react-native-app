@@ -9,11 +9,12 @@ interface Pokemon {
 }
 
 interface PokemonListState {
-    pokemons: Pokemon[];
-    filteredPokemons: Pokemon[];
-    loading: boolean;
-    initialLoading: boolean;
-    error: string | null;
-    offset: number;
-    hasMore: boolean;
+  pokemons: Pokemon[];
+  filteredPokemons: Pokemon[];
+  loading: boolean;
+  initialLoading: boolean;
+  error: string | null;
+  offset: number;
+  hasMore: boolean;
+  searchQuery?: string;
 }
