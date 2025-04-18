@@ -11,7 +11,6 @@ const PokemonDescription = ({ id }: { id: number }) => {
                 const res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
                 const data = await res.json();
 
-                // On cherche la première entrée en anglais
                 const entry = data.flavor_text_entries.find(
                     (item: any) => item.language.name === 'en'
                 );

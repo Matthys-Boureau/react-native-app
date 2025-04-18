@@ -15,7 +15,6 @@ interface StatHexagonProps {
 }
 
 const StatHexagon: React.FC<StatHexagonProps> = ({ stats, color }) => {
-    // Mapping pour les noms des stats
     const statNames = {
         'hp': 'HP',
         'attack': 'ATK',
@@ -25,32 +24,28 @@ const StatHexagon: React.FC<StatHexagonProps> = ({ stats, color }) => {
         'speed': 'SPD'
     };
     
-    // Configuration du graphique
-    const size = 100; // taille du graphique
+    const size = 100;
     const center = { x: size, y: size };
-    const maxValue = 150; // valeur max pour une stat à 100%
+    const maxValue = 150;
     
-    // Calculer les points pour l'hexagone de base (100%)
     const hexagonPoints = [];
     const dataPoints = [];
 
     for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI / 3) * i - Math.PI / 2; // Commence par le haut
+        const angle = (Math.PI / 3) * i - Math.PI / 2;
         const x = center.x + size * 0.8 * Math.cos(angle);
         const y = center.y + size * 0.8 * Math.sin(angle);
         hexagonPoints.push({ x, y });
         
-        // Calculer les points pour les données réelles
         const stat = stats[i];
         const value = stat.base_stat;
-        const ratio = Math.min(value / maxValue, 1); // limité à 1 (100%)
+        const ratio = Math.min(value / maxValue, 1);
         
         const dataX = center.x + size * 0.8 * ratio * Math.cos(angle);
         const dataY = center.y + size * 0.8 * ratio * Math.sin(angle);
         dataPoints.push({ x: dataX, y: dataY });
     }
     
-    // Convertir les points en chaîne pour le SVG
     const hexagonPath = hexagonPoints.map(p => `${p.x},${p.y}`).join(' ');
     const statsPath = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
     
@@ -112,8 +107,8 @@ const StatHexagon: React.FC<StatHexagonProps> = ({ stats, color }) => {
                 
                 {/* Étiquettes des stats */}
                 {hexagonPoints.map((point, index) => {
-                    const statName = statNames[stats[index].stat.name] || stats[index].stat.name.toUpperCase();
-                    const labelOffsetMultiplier = 1.15; // Pour placer les labels un peu à l'extérieur
+                    const statName = statNames[stats[index].stat.name as keyof typeof statNames] || stats[index].stat.name.toUpperCase();
+                    const labelOffsetMultiplier = 1.15;
                     const labelX = center.x + (point.x - center.x) * labelOffsetMultiplier;
                     const labelY = center.y + (point.y - center.y) * labelOffsetMultiplier;
                     
