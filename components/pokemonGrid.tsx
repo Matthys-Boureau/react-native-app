@@ -1,18 +1,9 @@
 import React, { memo } from 'react';
-import { 
-  View, 
-  Text, 
-  FlatList, 
-  StyleSheet,
-  ActivityIndicator,
-  Dimensions
-} from 'react-native';
-import PokemonGridItem from './pokemonGridItem';
+import { View, Text, FlatList, StyleSheet,ActivityIndicator} from 'react-native';
+import PokemonGridItem from '@/components/pokemonGridItem';
 
-const { width } = Dimensions.get('window');
 const COLUMN_COUNT = 3;
 const SPACING = 8;
-const ITEM_WIDTH = (width - (SPACING * (COLUMN_COUNT + 1))) / COLUMN_COUNT;
 const PAGE_SIZE = 21;
 
 interface PokemonGridProps {

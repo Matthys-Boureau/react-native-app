@@ -4,7 +4,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import axiosClient from '@/lib/axios';
 import PokeballAsset from '@/components/fichePokemonAsset';
 import PokemonNavigationArrows from '@/components/pokemonNavigationArrows';
+import StatHexagon from '@/components/pokeCharts';
 import { getColorFromType } from '@/lib/colorHelper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function PokemonDetail() {
     const { id } = useLocalSearchParams();
@@ -44,13 +46,23 @@ export default function PokemonDetail() {
         );
     }
 
+    const typeColors = pokemon.types.map((t: any) => getColorFromType(t.type.name));
     const primaryType = pokemon.types[0]?.type.name;
-    const bgColor = getColorFromType(primaryType);
+    const primaryColor = typeColors[0];
+    // Si le Pokémon a plusieurs types, utilisez leurs couleurs pour le dégradé
+    // Sinon, utilisez la même couleur deux fois pour un fond uni
+    const backgroundColors = typeColors.length > 1 ? typeColors : [primaryColor, primaryColor];
     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
 
     return (
-        <SafeAreaView style={[styles.safeArea, { backgroundColor: bgColor }]}>
-            <ScrollView style={[styles.scrollView, { backgroundColor: bgColor }]}>
+        <SafeAreaView style={styles.safeArea}>
+            <LinearGradient
+                colors={backgroundColors}
+                style={StyleSheet.absoluteFill}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+            />
+            <ScrollView style={styles.scrollView}>
                 <View style={[styles.container, { flex: 1 }]}>
                     <PokeballAsset />
 
@@ -83,50 +95,34 @@ export default function PokemonDetail() {
                                 </Text>
                             ))}
                         </View>
-                        <Text style={[styles.aboutTitle, {color: bgColor}]}>About</Text>
                         <View style={styles.aboutSection}>
                             <View style={styles.aboutItem}>
-                                <View style={styles.aboutValue}>
-                                    <Text style={{ fontSize: 20 }}>⚖️</Text>
-                                    <Text style={{ fontSize: 16 }}>{pokemon.weight / 10} kg</Text>
-                                </View>
                                 <Text style={styles.aboutLabel}>Weight</Text>
+                                <View style={styles.aboutValue}>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center' }}>{pokemon.weight / 10} kg</Text>
+                                </View>
                             </View>
                             <View style={styles.aboutItem}>
-                                <View style={styles.aboutValue}>
-                                    <Text style={{ fontSize: 20 }}>📏</Text>
-                                    <Text style={{ fontSize: 16 }}>{pokemon.height / 10} m</Text>
-                                </View>
                                 <Text style={styles.aboutLabel}>Height</Text>
+                                <View style={styles.aboutValue}>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center' }}>{pokemon.height / 10} m</Text>
+                                </View>
                             </View>
                             <View style={styles.aboutItem}>
-                                <View style={styles.aboutValue}>
-                                    <Text style={{ fontSize: 20 }}>💥</Text>
-                                    <Text style={{ fontSize: 16 }}>{pokemon.moves.slice(0, 2).map((m: any) => m.move.name).join('\n')}</Text>
-                                </View>
                                 <Text style={styles.aboutLabel}>Moves</Text>
+                                <View style={styles.aboutValue}>
+                                    <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>{pokemon.moves.slice(0, 2).map((m: any) => m.move.name).join('\n')}</Text>
+                                </View>
                             </View>
                         </View>
+
 
                         <Text style={styles.aboutDescription}>
                             This Pokémon prefers hot places. When it rains, steam is said to spout from the tip of its tail.
                         </Text>
 
-                        {/* Base Stats */}
-                        <Text style={{color: bgColor, ...styles.statsTitle}}>Base Stats</Text>
-                        {pokemon.stats.map((s: any, i: number) => (
-                            <View key={i} style={styles.statRow}>
-                                <Text style={[styles.statName, {color: bgColor }]}>{s.stat.name.toUpperCase()}</Text>
-                                <Text style={styles.statValue}>{s.base_stat}</Text>
-                                <View style={styles.statBarBackground}>
-                                    <View style={{
-                                        width: `${Math.min(s.base_stat, 100)}%`,
-                                        backgroundColor: bgColor,
-                                        ...styles.statBarFill,
-                                    }} />
-                                </View>
-                            </View>
-                        ))}
+                        {/* Base Stats - Utilisation du composant StatHexagon */}
+                        <StatHexagon stats={pokemon.stats} color={primaryColor} />
                     </View>
                 </View>
             </ScrollView>
@@ -145,6 +141,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
+        backgroundColor: 'transparent',
     },
     container: {
         position: 'relative',
@@ -186,13 +183,17 @@ const styles = StyleSheet.create({
         padding: 20,
         marginHorizontal: 4,
         marginVertical: -48,
-        paddingTop: 52,
+        paddingTop: 64,
+        position: 'relative',
     },
     typesContainer: {
         alignItems: 'center',
         marginBottom: 16,
         flexDirection: 'row',
         justifyContent: 'center',
+        position: 'absolute',
+        top: 24,
+        left: 8,
     },
     typeBadge: {
         paddingHorizontal: 12,
@@ -202,12 +203,6 @@ const styles = StyleSheet.create({
         color: 'white',
         marginHorizontal: 4,
         fontSize: 14,
-    },
-    aboutTitle: {
-        fontWeight: 'bold',
-        fontSize: 24,
-        textAlign: 'center',
-        marginBottom: 12,
     },
     aboutSection: {
         flexDirection: 'row',
@@ -232,33 +227,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         color: '#555',
-    },
-    statsTitle: {
-        fontWeight: 'bold',
-        fontSize: 24,
-        textAlign: 'center',
-        marginVertical: 20,
-    },
-    statRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 6,
-    },
-    statName: {
-        width: 60,
-        fontWeight: 'bold',
-    },
-    statValue: {
-        width: 40,
-    },
-    statBarBackground: {
-        flex: 1,
-        height: 6,
-        backgroundColor: '#eee',
-        borderRadius: 4,
-        overflow: 'hidden',
-    },
-    statBarFill: {
-        height: '100%',
     },
 });
