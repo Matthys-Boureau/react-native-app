@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 
-interface HeaderProps {
-    onSearchChange: (query: string) => void;
-}
-
 export default function Header({ onSearchChange }: HeaderProps) {
     const [searchValue, setSearchValue] = useState('');
 
