@@ -2,8 +2,8 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import FichePokemonTypes from './fichePokemonTypes'
 import FichePokemonAbout from './fichePokemonAbout'
-import PokemonDescription from './pokemonDescription'
-import StatHexagon from './pokeCharts'
+import PokemonDescription from '../pokemonDescription'
+import StatHexagon from '../pokeCharts'
 
 
 export default function FichePokemonCard({ pokemon, primaryColor }: { pokemon: any, primaryColor: string }) {

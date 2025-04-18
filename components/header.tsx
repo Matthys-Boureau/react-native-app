@@ -83,7 +83,7 @@ export default function Header({ onSearchChange }: HeaderProps) {
     return (
         <View
             style={{
-                backgroundColor: '#FF495C',
+                backgroundColor: '#F26157',
                 paddingVertical: 16,
             }}
         >

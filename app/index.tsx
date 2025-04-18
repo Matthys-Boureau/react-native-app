@@ -6,7 +6,7 @@ export default function Index() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#FF495C'
+        backgroundColor: '#F26157'
       }}
     >
       <View style={{ flex: 1, padding: 4}}>

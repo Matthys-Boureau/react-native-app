@@ -36,7 +36,7 @@ const PokemonList: React.FC = () => {
       
       {isSearching && (
         <View style={styles.searchingIndicator}>
-          <ActivityIndicator size="small" color="#FF495C" />
+          <ActivityIndicator size="small" color="#F26157" />
           <Text style={styles.searchingText}>Recherche en cours...</Text>
         </View>
       )}

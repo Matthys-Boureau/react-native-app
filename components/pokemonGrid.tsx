@@ -24,7 +24,7 @@ const PokemonGrid: React.FC<PokemonGridProps> = ({
     
     return (
       <View style={styles.footer}>
-        <ActivityIndicator size="small" color="#FF495C" />
+        <ActivityIndicator size="small" color="#F26157" />
         <Text style={styles.footerText}>Chargement...</Text>
       </View>
     );
