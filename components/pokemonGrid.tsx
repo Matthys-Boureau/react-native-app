@@ -69,15 +69,17 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#fff',
     overflow: 'hidden',
+    boxShadow: '0px 1px 3px 1px #00000040 inset',
+
   },
   gridContainer: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     paddingBottom: 20,
     paddingTop: 20,
   },
   columnWrapper: {
     marginBottom: SPACING,
-    gap: 4,
+    gap: 6,
   },
   footer: {
     flexDirection: 'row',

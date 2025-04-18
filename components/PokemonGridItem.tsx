@@ -29,7 +29,6 @@ const PokemonGridItem: React.FC<PokemonGridItemProps> = ({ name, id }) => {
       />
       <Text style={styles.pokemonId}>#{id}</Text>
       <Text style={styles.pokemonName}>{name}</Text>
-      <View style={styles.blockItem}></View>
     </TouchableOpacity>
   );
 };
@@ -41,24 +40,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    elevation: 3,
     aspectRatio: 0.9,
-  },
-  blockItem: {
-    position: 'absolute',
-    width: '100%',
-    height: '40%',
-    backgroundColor: '#EFEFEF',
-    bottom: 0,
-    zIndex: -1,
-    borderRadius: 10,
+    boxShadow: '0px 1px 3px 1px #00000033',
+    overflow: 'hidden',
   },
   pokemonId: {
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: 'bold',
     color: '#666',
     marginTop: 6,
     position: 'absolute',
@@ -66,11 +55,21 @@ const styles = StyleSheet.create({
     right: 8,
   },
   pokemonName: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     textTransform: 'capitalize',
     marginTop: 4,
     textAlign: 'center',
+    paddingTop: 24,
+    paddingBottom: 12,
+    backgroundColor: '#EFEFEF',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: -1,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
 });
 
