@@ -48,7 +48,6 @@ export default function PokemonDetail() {
     }
 
     const typeColors = pokemon.types.map((t: any) => getColorFromType(t.type.name));
-    const primaryType = pokemon.types[0]?.type.name;
     const primaryColor = typeColors[0];
     const backgroundColors = typeColors.length > 1 ? typeColors : [primaryColor, primaryColor];
     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;

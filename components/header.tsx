@@ -11,7 +11,6 @@ export default function Header({ onSearchChange }: HeaderProps) {
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     
-    // Demander les permissions au chargement
     useEffect(() => {
         (async () => {
             await Audio.requestPermissionsAsync();
@@ -73,7 +72,6 @@ export default function Header({ onSearchChange }: HeaderProps) {
         onSearchChange('');
     };
 
-    // Nettoyer le son lors du démontage du composant
     React.useEffect(() => {
         return sound
             ? () => {
