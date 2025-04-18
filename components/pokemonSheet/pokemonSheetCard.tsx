@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import FichePokemonTypes from './fichePokemonTypes'
-import FichePokemonAbout from './fichePokemonAbout'
+import FichePokemonTypes from './pokemonSheetTypes'
+import FichePokemonAbout from './pokemonSheetAbout'
 import PokemonDescription from '../pokemonDescription'
 import StatHexagon from '../pokeCharts'
 

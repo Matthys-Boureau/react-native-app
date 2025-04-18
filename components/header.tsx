@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Audio } from 'expo-av';
+import { MagnifyingGlassIcon, XMarkIcon } from 'react-native-heroicons/outline';
 
 interface HeaderProps {
   onSearchChange: (text: string) => void;
@@ -83,7 +84,7 @@ export default function Header({ onSearchChange }: HeaderProps) {
     return (
         <View
             style={{
-                backgroundColor: '#F26157',
+                backgroundColor: '#EF6351',
                 paddingVertical: 16,
             }}
         >
@@ -120,26 +121,29 @@ export default function Header({ onSearchChange }: HeaderProps) {
                     onChangeText={handleChange}
                     style={{
                         paddingVertical: 16,
-                        paddingLeft: 32,
-                        paddingRight: 32,
+                        paddingLeft: 40,
+                        paddingRight: 38,
                         borderRadius: 16,
                         fontSize: 16,
                         backgroundColor: '#fff',
                     }}
                 />
-
-                <Image source={require('../assets/images/loupe.png')} style={{
+                <MagnifyingGlassIcon color={'black'} style={{
                     position: 'absolute',
                     left: 20,
                     top: '50%',
                     width: 16,
                     height: 16,
-                    tintColor: '#888',
+                    transform: [{ translateY: -4 }],
                 }} />
 
+
                 {searchValue.length > 0 && (
-                    <TouchableOpacity onPress={clearSearch} style={{ position: 'absolute', right: 20, top: '50%', zIndex: 1 }}>
-                        <Text style={{ fontSize: 20, color: '#888' }}>✕</Text>
+                    <TouchableOpacity onPress={clearSearch} style={{ position: 'absolute', right: 20, top: '50%', zIndex: 1, transform: [{ translateY: -4 }] }}>
+                        <XMarkIcon color={'black'} style={{
+                            width: 16,
+                            height: 16,
+                        }} />
                     </TouchableOpacity>
                 )}
             </View>

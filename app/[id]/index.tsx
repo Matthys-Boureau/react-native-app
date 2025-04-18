@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import axiosClient from '@/lib/axios';
-import PokeballAsset from '@/components/fichePokemon/fichePokemonAsset';
+import PokeballAsset from '@/components/pokemonSheet/pokemonSheetAsset';
 import PokemonNavigationArrows from '@/components/pokemonNavigationArrows';
 import { getColorFromType } from '@/lib/colorHelper';
 import { LinearGradient } from 'expo-linear-gradient';
-import FicheHeader from '@/components/fichePokemon/fichePokemonHeader';
-import FichePokemonCard from '@/components/fichePokemon/fichePokemonCard';
+import FicheHeader from '@/components/pokemonSheet/pokemonSheetHeader';
+import FichePokemonCard from '@/components/pokemonSheet/pokemonSheetCard';
 
 export default function PokemonDetail() {
     const { id } = useLocalSearchParams();
